@@ -45,6 +45,17 @@ const vm = require('vm');
         });
 
     }
+    
+    if(window.location.hash.length > 0) {
+        const hash = window.location.hash;
+        const url = window.location.href.replace(hash, '');
+        ((remove, add, reset) => {
+            window.history.pushState({hash: remove}, null, add);
+            setupResourceLoader(init);
+            reset();
+        })(hash, url, () => window.location.hash = window.history.state.hash);
+    } else {
+        setupResourceLoader(init);
+    }
 
-    setupResourceLoader(init); 
 };
