@@ -1,28 +1,50 @@
-import classNames from 'classnames';
-import { wire } from "hyperhtml";
+import Component from '@biotope/element';
+import CounterButton from './index';
+import MY_BUTTON_EVENTS from "./events";
+import { wire } from 'hyperhtml';
 
-interface XButtonTemplateData {
-  add?: boolean,
-  remove?: boolean
-  disabled?: boolean,
-  btnText: string;
-  value?: number,
-  type?: string,
-}
+  // private addOne() {
+  //   let prevState:number = this.state.value;
+  //   this.setState({
+  //     value: prevState++
+  //   });
+  // };
 
-export default (render: Function, {value, add, remove, disabled, btnText, type}: XButtonTemplateData) => {
+  // private removeOne() {
+  //   let prevState:number = this.state.value;
+  //   this.setState({
+  //     value: prevState--
+  //   });
+  // }
 
-  const btnClass = classNames('x-button__btn', {
-    ['x-button__btn--add']: add,
-    ['x-button__btn--remove']: remove,
-  });
-
-  const renderCounter = () => (
-    wire()`<button type="${type}" class="${btnClass}" disabled="${disabled}">${btnText}</button>`
-  );
   
-  return (
-    render`
-    <h2>${value}</h2>
-    ${renderCounter()}`);
+class Counter extends Component {
+  static dependencies = [CounterButton as typeof Component];
+
+  public static componentName = 'counter-wrapper';
+
+  constructor() {
+    super();
+    this.buttonPressed = this.buttonPressed.bind(this);
+  }
+
+  get defaultState() {
+    return {
+      counter: 0
+    }
+  }
+
+  private buttonPressed() {
+    console.log("the button was pressed");
+  }
+
+  render() {
+    return (
+      this.html`
+      <h2>${this.state.counter}</h2>
+      <counter-button onpressed=${this.buttonPressed} type="bt2n" title="Lorem asIpsum" add="true" disable="false"><counter-button/>`
+    )
+  }
 }
+
+Counter.register();

@@ -1,61 +1,44 @@
 import Component from '@biotope/element';
-import template from './template';
+import MY_BUTTON_EVENTS from './events';
+import { wire } from 'hyperhtml';
+import classNames from 'classnames';
 
   interface CounterButtonProps {
     add?: boolean;
     remove?: boolean;
-    btnText: string;
-    type: 'btn';
+    title?: string;
+    type: string;
   }
 
-interface counterButtonState {
-  value?: number;
-}
+  interface CounterButtonState {
+    disabled: boolean;
+  }
 
-class Counter extends Component< CounterButtonProps, counterButtonState > {
+export default class CounterButton extends Component< CounterButtonProps, CounterButtonState > {
+  
+  public static componentName = 'counter-button';
+  protected static attributes = [
+    'title',
+    'add',
+    'remove'
+  ];
 
   constructor() {
     super();
     this.onClick = this.onClick.bind(this);
   }
 
-  public static componentName = 'counter-button';
-
-  get defaultState() {
-    return {
-      value: 0
-    }
-  }
-
-  protected static attributes = [
-    { name: 'example', converter: (value) => value != null },
-    'type',
-    'btn-href'
-  ];
-
   protected get defaultProps(): CounterButtonProps {
     return {
-      btnText: 'Example Button',
+      title: 'Default Button',
       type: 'btn'
     }
   }
 
-  private addOne() {
-    let prevState:number = this.state.value;
-    this.setState({
-      value: prevState++
-    });
-  };
-
-  private removeOne() {
-    let prevState:number = this.state.value;
-    this.setState({
-      value: prevState--
-    });
-  }
-
-  private get button(): HTMLElement {
-    return this.shadowRoot.querySelector('.x-button__btn');
+  get defaultState(): CounterButtonState {
+    return {
+      disabled: false
+    }
   }
 
   public connectedCallback() {
@@ -67,19 +50,23 @@ class Counter extends Component< CounterButtonProps, counterButtonState > {
   }
 
   private onClick() {
-    this.emit('click');
+    this.emit(MY_BUTTON_EVENTS.PRESSED);
+    console.log('clicked');
   }
+  
+  renderButton = (title, add, remove) => {
+    const btnClass = classNames('counter-button__btn', {
+      ['counter-button__btn--add']: add,
+      ['counter-button__btn--remove']: remove,
+    });
+
+    return wire()`<button type="${this.props.type}" class="${btnClass}" disabled="${this.state.disabled}">${title}</button>`
+  };
 
   render() {
-    return template(this.html, {
-      value: this.state.value,
-      add: true,
-      remove: false,
-      btnText: this.props.btnText,
-      disabled: false,
-      type: 'btn'
-    });
+    return this.html`
+    <button type="${this.props.type}" onClick=${this.onClick} disabled="${this.state.disabled}">${this.props.title}</button>`
   }
 }
 
-Counter.register();
+CounterButton.register();
