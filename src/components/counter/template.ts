@@ -34,15 +34,24 @@ class Counter extends Component {
     }
   }
 
-  private buttonPressed() {
-    console.log("the button was pressed");
+  private buttonPressed(e) {
+    let prevCounter:number = this.state.counter;
+    if (e.target.add) {
+      this.setState({
+        counter: prevCounter++
+      });
+    } else {
+      this.setState({
+        counter: prevCounter--
+      });
+    }
+
   }
 
   render() {
     return (
       this.html`
-      <h2>${this.state.counter}</h2>
-      <counter-button onpressed=${this.buttonPressed} type="bt2n" title="Lorem asIpsum" add="true" disable="false"><counter-button/>`
+      <h2>${this.state.counter}</h2>`
     )
   }
 }

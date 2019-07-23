@@ -30,7 +30,6 @@ export default class CounterButton extends Component< CounterButtonProps, Counte
 
   protected get defaultProps(): CounterButtonProps {
     return {
-      title: 'Default Button',
       type: 'btn'
     }
   }
@@ -51,11 +50,10 @@ export default class CounterButton extends Component< CounterButtonProps, Counte
 
   private onClick() {
     this.emit(MY_BUTTON_EVENTS.PRESSED);
-    console.log('clicked');
   }
   
-  renderButton = (title, add, remove) => {
-    const btnClass = classNames('counter-button__btn', {
+  renderButton = (title:string, add:boolean, remove:boolean) => {
+    const btnClass = classNames('counter-button__btn ', {
       ['counter-button__btn--add']: add,
       ['counter-button__btn--remove']: remove,
     });
@@ -64,8 +62,7 @@ export default class CounterButton extends Component< CounterButtonProps, Counte
   };
 
   render() {
-    return this.html`
-    <button type="${this.props.type}" onClick=${this.onClick} disabled="${this.state.disabled}">${this.props.title}</button>`
+    return this.html`${this.renderButton(this.props.title, this.props.add, this.props.remove)}`
   }
 }
 
