@@ -1,23 +1,8 @@
 import Component from '@biotope/element';
-import CounterButton from './index';
+import CounterButton from './counter';
 import MY_BUTTON_EVENTS from "./events";
 import { wire } from 'hyperhtml';
 
-  // private addOne() {
-  //   let prevState:number = this.state.value;
-  //   this.setState({
-  //     value: prevState++
-  //   });
-  // };
-
-  // private removeOne() {
-  //   let prevState:number = this.state.value;
-  //   this.setState({
-  //     value: prevState--
-  //   });
-  // }
-
-  
 class Counter extends Component {
   static dependencies = [CounterButton as typeof Component];
 
@@ -30,7 +15,8 @@ class Counter extends Component {
 
   get defaultState() {
     return {
-      counter: 0
+      counter: 0,
+      disabled: false
     }
   }
 
@@ -38,20 +24,23 @@ class Counter extends Component {
     let prevCounter:number = this.state.counter;
     if (e.target.add) {
       this.setState({
-        counter: prevCounter++
+        counter: prevCounter += 1
       });
     } else {
       this.setState({
-        counter: prevCounter--
+        counter: prevCounter -= 1
       });
     }
 
   }
 
   render() {
+    let disabled = true;
     return (
       this.html`
-      <h2>${this.state.counter}</h2>`
+        <h2>${this.state.counter}</h2>
+        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="ADD" add="true" isDisabled="false"></counter-button>
+        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="REMOVE" remove="true" isDisabled="true"></counter-button>`
     )
   }
 }
