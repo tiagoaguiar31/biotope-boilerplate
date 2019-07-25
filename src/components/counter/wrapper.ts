@@ -1,7 +1,5 @@
 import Component from '@biotope/element';
 import CounterButton from './counter';
-import MY_BUTTON_EVENTS from "./events";
-import { wire } from 'hyperhtml';
 
 class Counter extends Component {
   static dependencies = [CounterButton as typeof Component];
@@ -35,12 +33,11 @@ class Counter extends Component {
   }
 
   render() {
-    let disabled = true;
     return (
       this.html`
         <h2>${this.state.counter}</h2>
-        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="ADD" add="true" isDisabled="false"></counter-button>
-        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="REMOVE" remove="true" isDisabled="true"></counter-button>`
+        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="ADD" add="true"></counter-button>
+        <counter-button onpressed=${(e) => this.buttonPressed(e)} type="btn" title="REMOVE" remove="true"></counter-button>`
     )
   }
 }

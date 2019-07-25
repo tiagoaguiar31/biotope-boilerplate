@@ -1,6 +1,6 @@
 import Component from '@biotope/element';
 import MY_BUTTON_EVENTS from './events';
-import hyper, { wire, bind } from 'hyperhtml';
+import { wire } from 'hyperhtml';
 import classNames from 'classnames';
 
   interface CounterButtonProps {
@@ -8,7 +8,6 @@ import classNames from 'classnames';
     remove?: boolean;
     title?: string;
     type: string;
-    isDisabled?: boolean
   }
 
 export default class CounterButton extends Component< CounterButtonProps > {
@@ -18,7 +17,6 @@ export default class CounterButton extends Component< CounterButtonProps > {
     'title',
     'add',
     'remove',
-    'isDisabled'
   ];
 
   constructor() {
@@ -48,18 +46,42 @@ export default class CounterButton extends Component< CounterButtonProps > {
     this.emit(MY_BUTTON_EVENTS.PRESSED);
   }
   
-  renderButton = (title:string, add:boolean, remove:boolean, isDisabled:boolean) => {
+  renderButton = (title:string, add:boolean, remove:boolean) => {
     const btnClass = classNames('counter-button__btn ', {
       ['counter-button__btn--add']: add,
       ['counter-button__btn--remove']: remove,
     });
-    console.log(isDisabled)
-    return wire()`<button type="${this.props.type}" class="${btnClass}" >${title}</button>`
+    
+    return wire()`<button type="${this.props.type}" class="${btnClass}">${title}</button>`
   };
 
   render() {
-    console.log(this.props)
-    return this.html`${this.renderButton(this.props.title, this.props.add, this.props.remove, this.props.isDisabled)}`
+
+    return (
+      this.html`
+      <style>
+        .counter-button__btn {
+          padding: 7px 26px;
+          border-radius: 20px;
+          margin: 10px;
+          font-size: 14px;
+          border: 1px solid white;
+          cursor: pointer;
+          font-weight: bold;
+          display: inline-block;
+        }
+        .counter-button__btn--remove {
+          background-color: red;
+          color: white;
+        }
+        .counter-button__btn--add {
+          background-color: green;
+          color: white;
+        }
+
+      </style>
+      
+      ${this.renderButton(this.props.title, this.props.add, this.props.remove)}`)
   }
 }
 
